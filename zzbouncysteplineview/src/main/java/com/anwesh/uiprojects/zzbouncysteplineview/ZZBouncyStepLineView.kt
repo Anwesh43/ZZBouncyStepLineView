@@ -212,4 +212,13 @@ class ZZBouncyStepLineView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity: Activity) : ZZBouncyStepLineView {
+            val view : ZZBouncyStepLineView = ZZBouncyStepLineView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
