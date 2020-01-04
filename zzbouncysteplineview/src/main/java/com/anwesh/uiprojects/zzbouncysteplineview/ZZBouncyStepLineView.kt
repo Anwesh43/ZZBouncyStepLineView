@@ -18,7 +18,7 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#9C27B0")
 val backColor : Int = Color.parseColor("#BDBDBD")
-val delay : Long = 30
+val delay : Long = 10
 val scGap : Float = 0.02f / lines
 
 fun Int.inverse() : Float = 1f / this
@@ -30,11 +30,13 @@ fun Canvas.drawZZBouncyStepLine(i : Int, scale : Float, size : Float, paint : Pa
     val sf : Float = scale.sinify().divideScale(i, lines)
     val j : Int = i / 2
     val i2 : Int = i % 2
-    val k : Int =  i2 + 1
+    val k : Int =  1 - i2
     val j1 : Int = (i + 1) / 2
     save()
     translate(-size / 2 + size * j, -size + size * j1)
-    drawLine(0f, 0f, size * sf * i2, size * sf * k, paint)
+    if (sf > 0f) {
+        drawLine(0f, 0f, size * sf * i2, size * sf * k, paint)
+    }
     restore()
 }
 
@@ -169,12 +171,11 @@ class ZZBouncyStepLineView(ctx : Context) : View(ctx) {
 
     data class ZZBouncyStepLine(var i : Int) {
 
-        private val root : ZZBSLNode = ZZBSLNode(0)
-        private var curr : ZZBSLNode = root
+        private var curr : ZZBSLNode = ZZBSLNode(0)
         private var dir : Int = 1
 
         fun draw(canvas : Canvas, paint : Paint) {
-            root.draw(canvas, paint)
+            curr.draw(canvas, paint)
         }
 
         fun update(cb : (Float) -> Unit) {
