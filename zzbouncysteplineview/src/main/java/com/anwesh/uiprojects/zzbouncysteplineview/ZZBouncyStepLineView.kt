@@ -189,4 +189,26 @@ class ZZBouncyStepLineView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : ZZBouncyStepLineView) {
+
+        private val zzbsl : ZZBouncyStepLine = ZZBouncyStepLine(0)
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            zzbsl.draw(canvas, paint)
+            animator.animate {
+                zzbsl.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            zzbsl.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
