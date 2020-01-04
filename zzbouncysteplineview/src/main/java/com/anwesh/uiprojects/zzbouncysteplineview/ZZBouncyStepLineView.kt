@@ -25,3 +25,35 @@ fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawZZBouncyStepLine(i : Int, scale : Float, size : Float, paint : Paint) {
+    val sf : Float = scale.sinify().divideScale(i, lines)
+    val j : Int = i / 2
+    val i2 : Int = i % 2
+    val k : Int =  i2 + 1
+    val j1 : Int = (i + 1) / 2
+    save()
+    translate(-size / 2 + size * j, -size + size * j1)
+    drawLine(0f, 0f, size * sf * i2, size * sf * k, paint)
+    restore()
+}
+
+fun Canvas.drawZZBouncyStepLines(scale : Float, size : Float, paint : Paint) {
+    for (j in 0..(lines - 1)) {
+        drawZZBouncyStepLine(j, scale, size, paint)
+    }
+}
+
+fun Canvas.drawZZBSLNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    save()
+    translate(gap * (i + 1), h / 2)
+    drawZZBouncyStepLines(scale, size, paint)
+    restore()
+}
